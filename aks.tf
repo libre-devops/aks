@@ -1,6 +1,6 @@
 resource "azurerm_kubernetes_cluster" "main_aks" {
 
-  name                    = lower(var.resource_name)
+  name                    = lower(var.aks_name)
   kubernetes_version      = var.kubernetes_version
   location                = var.location
   resource_group_name     = var.rg_name
@@ -71,9 +71,9 @@ resource "azurerm_kubernetes_cluster" "main_aks" {
   http_application_routing_enabled = var.enable_http_application_routing
   azure_policy_enabled             = var.enable_azure_policy
 
-  oms_agent {
-    log_analytics_workspace_id = var.law_workspace_id
-  }
+#  oms_agent {
+#    log_analytics_workspace_id = var.law_workspace_id
+#  }
 
   network_profile {
     network_plugin     = var.network_plugin

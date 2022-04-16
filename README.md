@@ -5,11 +5,6 @@ module "aks" {
   location = azurerm_resource_group.rg.location
   tags     = azurerm_resource_group.rg.tags
 
-  law_location       = data.azurerm_log_analytics_workspace.law_workspace.location
-  law_workspace_id   = data.azurerm_log_analytics_workspace.law_workspace.id
-  law_rg_name        = data.azurerm_resource_group.law_rg.name
-  law_workspace_name = data.azurerm_log_analytics_workspace.law_workspace.name
-
   resource_name           = "aks-${var.prefix}-${var.loc}-${terraform.workspace}"
   admin_username          = var.admin_username
   ssh_public_key          = data.azurerm_ssh_public_key.public_ssh.public_key
@@ -32,7 +27,6 @@ module "aks" {
   user_assigned_identity_id = data.azurerm_user_assigned_identity.managed_id.id
 }
 ```
-
 ## Requirements
 
 No requirements.
@@ -52,20 +46,20 @@ No modules.
 | Name | Type |
 |------|------|
 | [azurerm_kubernetes_cluster.main_aks](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster) | resource |
-| [azurerm_monitor_diagnostic_setting.diags](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_diagnostic_setting) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_admin_username"></a> [admin\_username](#input\_admin\_username) | The admin username of the cluster | `string` | n/a | yes |
+| <a name="input_aks_name"></a> [aks\_name](#input\_aks\_name) | The name of the resource to be created | `string` | n/a | yes |
 | <a name="input_client_id"></a> [client\_id](#input\_client\_id) | The ID of the service principle, if one is to be used, defaults to empty string as it is not used | `string` | `""` | no |
 | <a name="input_client_secret"></a> [client\_secret](#input\_client\_secret) | The client secret of the service principle, if one is to used, defaults to empty string as it is not used | `string` | `""` | no |
 | <a name="input_default_node_agents_max_count"></a> [default\_node\_agents\_max\_count](#input\_default\_node\_agents\_max\_count) | The maximum count of agent that are deployed to the default node, defaults to 1 | `number` | `"1"` | no |
 | <a name="input_default_node_agents_min_count"></a> [default\_node\_agents\_min\_count](#input\_default\_node\_agents\_min\_count) | The minimum count of agents that are deployed to the default node, defaults to 1 | `number` | n/a | yes |
 | <a name="input_default_node_agents_type"></a> [default\_node\_agents\_type](#input\_default\_node\_agents\_type) | Sets the default agent type | `string` | `"VirtualMachineScaleSets"` | no |
 | <a name="input_default_node_availability_zones"></a> [default\_node\_availability\_zones](#input\_default\_node\_availability\_zones) | The default nodes availability zones, in list format | `list(string)` | n/a | yes |
-| <a name="input_default_node_count"></a> [default\_node\_count](#input\_default\_node\_count) | The default amount of nodes to be provisoned, defaults to 1 | `number` | `1` | no |
+| <a name="input_default_node_count"></a> [default\_node\_count](#input\_default\_node\_count) | The default amount of nodes to be provisioned, defaults to 1 | `number` | `1` | no |
 | <a name="input_default_node_enable_auto_scaling"></a> [default\_node\_enable\_auto\_scaling](#input\_default\_node\_enable\_auto\_scaling) | If auto scaling should be enabled for the default node, defaults to false | `bool` | `false` | no |
 | <a name="input_default_node_enable_manually_scaling"></a> [default\_node\_enable\_manually\_scaling](#input\_default\_node\_enable\_manually\_scaling) | If manually scaling should be enabled for the default node, defaults to false | `bool` | `true` | no |
 | <a name="input_default_node_orchestrator_version"></a> [default\_node\_orchestrator\_version](#input\_default\_node\_orchestrator\_version) | The orchestrator version of the default node | `string` | n/a | yes |
@@ -79,11 +73,10 @@ No modules.
 | <a name="input_enable_http_application_routing"></a> [enable\_http\_application\_routing](#input\_enable\_http\_application\_routing) | Whether or not http routing is allowed, defaults to false | `bool` | `false` | no |
 | <a name="input_enable_ingress_application_gateway"></a> [enable\_ingress\_application\_gateway](#input\_enable\_ingress\_application\_gateway) | Whether or not a application gateway should be enabled for ingress controller, defaults to null | `any` | `null` | no |
 | <a name="input_enable_node_public_ip"></a> [enable\_node\_public\_ip](#input\_enable\_node\_public\_ip) | (Optional) Should nodes in this Node Pool have a Public IP Address? Defaults to false. | `bool` | `false` | no |
-| <a name="input_identity_type"></a> [identity\_type](#input\_identity\_type) | The type of identity to be used, defaults to systemassigned | `string` | `"SystemAssigned"` | no |
+| <a name="input_identity_type"></a> [identity\_type](#input\_identity\_type) | The type of identity to be used, defaults to system-assigned | `string` | `"SystemAssigned"` | no |
 | <a name="input_kubernetes_version"></a> [kubernetes\_version](#input\_kubernetes\_version) | The kubernetes version in floating point | `string` | n/a | yes |
 | <a name="input_law_location"></a> [law\_location](#input\_law\_location) | The location of the log analytics workspace | `string` | n/a | yes |
 | <a name="input_law_rg_name"></a> [law\_rg\_name](#input\_law\_rg\_name) | The resource group name which the log analytics workspace is located | `string` | n/a | yes |
-| <a name="input_law_workspace_id"></a> [law\_workspace\_id](#input\_law\_workspace\_id) | The ID of the log analytics workspace.  This resource does not create a log analytics workspace and is expecting an input of an already existent log analytics resource | `string` | n/a | yes |
 | <a name="input_law_workspace_name"></a> [law\_workspace\_name](#input\_law\_workspace\_name) | The name of the log analytics workspace | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | The location for this resource to be put in | `string` | n/a | yes |
 | <a name="input_net_profile_dns_service_ip"></a> [net\_profile\_dns\_service\_ip](#input\_net\_profile\_dns\_service\_ip) | (Optional) IP address within the Kubernetes service address range that will be used by cluster service discovery (kube-dns). Changing this forces a new resource to be created. | `string` | `null` | no |
@@ -94,7 +87,6 @@ No modules.
 | <a name="input_network_plugin"></a> [network\_plugin](#input\_network\_plugin) | Network plugin to use for networking. | `string` | `"kubenet"` | no |
 | <a name="input_network_policy"></a> [network\_policy](#input\_network\_policy) | (Optional) Sets up network policy to be used with Azure CNI. Network policy allows us to control the traffic flow between pods. Currently supported values are calico and azure. Changing this forces a new resource to be created. | `string` | `null` | no |
 | <a name="input_private_cluster_enabled"></a> [private\_cluster\_enabled](#input\_private\_cluster\_enabled) | If true cluster API server will be exposed only on internal IP address and available only in cluster vnet. | `bool` | `true` | no |
-| <a name="input_resource_name"></a> [resource\_name](#input\_resource\_name) | The name of the resource to be created | `string` | n/a | yes |
 | <a name="input_rg_name"></a> [rg\_name](#input\_rg\_name) | The name of the resource group, this module does not create a resource group, it is expecting the value of a resource group already exists | `string` | n/a | yes |
 | <a name="input_sku_tier"></a> [sku\_tier](#input\_sku\_tier) | The SKU tier of the kubernetes cluster, default is Free.  Difference only is if there is an SLA | `string` | `"Free"` | no |
 | <a name="input_ssh_public_key"></a> [ssh\_public\_key](#input\_ssh\_public\_key) | The public key for the admin user | `string` | n/a | yes |
@@ -105,7 +97,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_cluster_api_service_authorised_ranges"></a> [cluster\_api\_service\_authorised\_ranges](#output\_cluster\_api\_service\_authorised\_ranges) | The list of authortrised IPs |
+| <a name="output_cluster_api_service_authorised_ranges"></a> [cluster\_api\_service\_authorised\_ranges](#output\_cluster\_api\_service\_authorised\_ranges) | The list of authorised IPs |
 | <a name="output_cluster_fqdn"></a> [cluster\_fqdn](#output\_cluster\_fqdn) | The FQDN of the cluster |
 | <a name="output_cluster_id"></a> [cluster\_id](#output\_cluster\_id) | The id of the cluster |
 | <a name="output_cluster_name"></a> [cluster\_name](#output\_cluster\_name) | The name of the cluster |

@@ -21,7 +21,7 @@ variable "tags" {
   }
 }
 
-variable "resource_name" {
+variable "aks_name" {
   description = "The name of the resource to be created"
   type        = string
   validation {
