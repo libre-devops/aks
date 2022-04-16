@@ -1,42 +1,35 @@
 ```hcl
-module "azdo_aks" {
+module "aks" {
   source   = "libre-devops/aks/azurerm"
-  rg_name  = data.azurerm_resource_group.pre_req_rg.name
-  location = data.azurerm_resource_group.pre_req_rg.location
-  tags     = data.azurerm_resource_group.pre_req_rg.tags
+  rg_name  = azurerm_resource_group.rg.name
+  location = azurerm_resource_group.rg.location
+  tags     = azurerm_resource_group.rg.tags
 
   law_location       = data.azurerm_log_analytics_workspace.law_workspace.location
   law_workspace_id   = data.azurerm_log_analytics_workspace.law_workspace.id
   law_rg_name        = data.azurerm_resource_group.law_rg.name
   law_workspace_name = data.azurerm_log_analytics_workspace.law_workspace.name
 
-  resource_name           = "${var.Prefix}-${var.Loc}-${var.ProductTag}-${terraform.workspace}-aks"
-  admin_username          = var.AdminUsername
-  ssh_public_key          = data.azurerm_ssh_public_key.pre_req_public_ssh.public_key
-  kubernetes_version      = var.KubernetesVersion
-  dns_prefix              = var.DnsPrefix
-  sku_tier                = var.SkuTier
+  resource_name           = "aks-${var.prefix}-${var.loc}-${terraform.workspace}"
+  admin_username          = var.admin_username
+  ssh_public_key          = data.azurerm_ssh_public_key.public_ssh.public_key
+  kubernetes_version      = var.k8s_vers
+  dns_prefix              = var.dns_prefix
+  sku_tier                = var.sku
   private_cluster_enabled = true
 
   default_node_enable_auto_scaling  = false
-  default_node_orchestrator_version = var.OrchestratorVersion
-  default_node_pool_name            = var.PoolName
-  default_node_vm_size              = var.VmSize
-  default_node_os_disk_size_gb      = var.OsDiskSize
-  default_node_subnet_id            = data.azurerm_subnet.main_sn.id
+  default_node_orchestrator_version = var.orchestrator_version
+  default_node_pool_name            = var.pool_name
+  default_node_vm_size              = var.vm_size
+  default_node_os_disk_size_gb      = var.osdisk_size
+  default_node_subnet_id            = data.azurerm_subnet.sn.id
   default_node_availability_zones   = ["1"]
   default_node_count                = "1"
   default_node_agents_min_count     = null
   default_node_agents_max_count     = null
 
-  user_assigned_identity_id = data.azurerm_user_assigned_identity.pre_req_id.id
-}
-
-resource "azurerm_role_assignment" "registry" {
-  principal_id                     = module.azdo_aks.kublet_identity
-  role_definition_name             = "AcrPush"
-  scope                            = data.azurerm_container_registry.data_acr.id
-  skip_service_principal_aad_check = true
+  user_assigned_identity_id = data.azurerm_user_assigned_identity.managed_id.id
 }
 ```
 
