@@ -25,7 +25,7 @@ variable "aks_name" {
   description = "The name of the resource to be created"
   type        = string
   validation {
-    condition     = length(var.resource_name) > 1 && length(var.resource_name) <= 24
+    condition     = length(var.aks_name) > 1 && length(var.aks_name) <= 24
     error_message = "The resource name is invalid."
   }
 }
@@ -160,21 +160,6 @@ variable "enable_auto_scaling" {
 
 variable "user_assigned_identity_id" {
   description = "The ID of the user assigned managed identity"
-  type        = string
-}
-
-variable "law_location" {
-  description = "The location of the log analytics workspace"
-  type        = string
-}
-
-variable "law_rg_name" {
-  description = "The resource group name which the log analytics workspace is located"
-  type        = string
-}
-
-variable "law_workspace_name" {
-  description = "The name of the log analytics workspace"
   type        = string
 }
 

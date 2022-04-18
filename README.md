@@ -1,30 +1,31 @@
 ```hcl
 module "aks" {
-  source   = "libre-devops/aks/azurerm"
-  rg_name  = azurerm_resource_group.rg.name
-  location = azurerm_resource_group.rg.location
-  tags     = azurerm_resource_group.rg.tags
+  source = "registry.terraform.io/libre-devops/aks/azurerm"
 
-  resource_name           = "aks-${var.prefix}-${var.loc}-${terraform.workspace}"
-  admin_username          = var.admin_username
-  ssh_public_key          = data.azurerm_ssh_public_key.public_ssh.public_key
-  kubernetes_version      = var.k8s_vers
-  dns_prefix              = var.dns_prefix
-  sku_tier                = var.sku
+  rg_name  = module.rg.rg_name
+  location = module.rg.rg_location
+  tags     = module.rg.rg_tags
+
+  aks_name           = "aks-${var.short}-${var.loc}-${terraform.workspace}-01"
+  admin_username          = "LibreDevOpsAdmin"
+  ssh_public_key          = data.azurerm_ssh_public_key.mgmt_ssh_key.public_key
+  kubernetes_version      = "1.22"
+  dns_prefix              = "ldo"
+  sku_tier                = "Free"
   private_cluster_enabled = true
 
   default_node_enable_auto_scaling  = false
-  default_node_orchestrator_version = var.orchestrator_version
-  default_node_pool_name            = var.pool_name
-  default_node_vm_size              = var.vm_size
-  default_node_os_disk_size_gb      = var.osdisk_size
-  default_node_subnet_id            = data.azurerm_subnet.sn.id
+  default_node_orchestrator_version = "1.22"
+  default_node_pool_name            = "lbdo-pool"
+  default_node_vm_size              = "Standard_B2ms"
+  default_node_os_disk_size_gb      = "127"
+  default_node_subnet_id            = element(module.network.subnets_ids, 2)
   default_node_availability_zones   = ["1"]
   default_node_count                = "1"
   default_node_agents_min_count     = null
   default_node_agents_max_count     = null
 
-  user_assigned_identity_id = data.azurerm_user_assigned_identity.managed_id.id
+  user_assigned_identity_id = data.azurerm_user_assigned_identity.mgmt_user_assigned_id.id
 }
 ```
 ## Requirements
@@ -75,9 +76,6 @@ No modules.
 | <a name="input_enable_node_public_ip"></a> [enable\_node\_public\_ip](#input\_enable\_node\_public\_ip) | (Optional) Should nodes in this Node Pool have a Public IP Address? Defaults to false. | `bool` | `false` | no |
 | <a name="input_identity_type"></a> [identity\_type](#input\_identity\_type) | The type of identity to be used, defaults to system-assigned | `string` | `"SystemAssigned"` | no |
 | <a name="input_kubernetes_version"></a> [kubernetes\_version](#input\_kubernetes\_version) | The kubernetes version in floating point | `string` | n/a | yes |
-| <a name="input_law_location"></a> [law\_location](#input\_law\_location) | The location of the log analytics workspace | `string` | n/a | yes |
-| <a name="input_law_rg_name"></a> [law\_rg\_name](#input\_law\_rg\_name) | The resource group name which the log analytics workspace is located | `string` | n/a | yes |
-| <a name="input_law_workspace_name"></a> [law\_workspace\_name](#input\_law\_workspace\_name) | The name of the log analytics workspace | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | The location for this resource to be put in | `string` | n/a | yes |
 | <a name="input_net_profile_dns_service_ip"></a> [net\_profile\_dns\_service\_ip](#input\_net\_profile\_dns\_service\_ip) | (Optional) IP address within the Kubernetes service address range that will be used by cluster service discovery (kube-dns). Changing this forces a new resource to be created. | `string` | `null` | no |
 | <a name="input_net_profile_docker_bridge_cidr"></a> [net\_profile\_docker\_bridge\_cidr](#input\_net\_profile\_docker\_bridge\_cidr) | (Optional) IP address (in CIDR notation) used as the Docker bridge IP address on nodes. Changing this forces a new resource to be created. | `string` | `null` | no |
