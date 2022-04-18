@@ -158,11 +158,6 @@ variable "enable_auto_scaling" {
   default     = false
 }
 
-variable "user_assigned_identity_id" {
-  description = "The ID of the user assigned managed identity"
-  type        = string
-}
-
 variable "enable_ingress_application_gateway" {
   description = "Whether or not a application gateway should be enabled for ingress controller, defaults to null"
   default     = null
