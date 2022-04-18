@@ -73,6 +73,7 @@ resource "azurerm_kubernetes_cluster" "main_aks" {
       type         = var.identity_type
       identity_ids = length(var.identity_ids) > 0 ? var.identity_ids : []
     }
+  }
 
 
     http_application_routing_enabled = var.enable_http_application_routing
@@ -98,4 +99,3 @@ resource "azurerm_kubernetes_cluster" "main_aks" {
       create = "20m"
     }
   }
-}
