@@ -1,3 +1,4 @@
+#tfsec:ignore:azure-container-logging
 resource "azurerm_kubernetes_cluster" "main_aks" {
 
   name                    = lower(var.aks_name)
