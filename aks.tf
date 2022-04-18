@@ -71,9 +71,9 @@ resource "azurerm_kubernetes_cluster" "main_aks" {
   http_application_routing_enabled = var.enable_http_application_routing
   azure_policy_enabled             = var.enable_azure_policy
 
-#  oms_agent {
-#    log_analytics_workspace_id = var.law_workspace_id
-#  }
+  #  oms_agent {
+  #    log_analytics_workspace_id = var.law_workspace_id
+  #  }
 
   network_profile {
     network_plugin     = var.network_plugin
