@@ -76,30 +76,30 @@ resource "azurerm_kubernetes_cluster" "main_aks" {
   }
 
 
-    http_application_routing_enabled = var.enable_http_application_routing
-    azure_policy_enabled             = var.enable_azure_policy
-   role_based_access_control_enabled = var.enable_rbac
+  http_application_routing_enabled  = var.enable_http_application_routing
+  azure_policy_enabled              = var.enable_azure_policy
+  role_based_access_control_enabled = var.enable_rbac
 
   dynamic "oms_agent" {
-    for_each = length(var.law_workspace_id) != ""  ? [var.law_workspace_id] : []
+    for_each = length(var.law_workspace_id) != "" ? [var.law_workspace_id] : []
     content {
       log_analytics_workspace_id = var.law_workspace_id
     }
   }
 
-    network_profile {
-      network_plugin     = var.network_plugin
-      network_policy     = var.network_policy
-      dns_service_ip     = var.net_profile_dns_service_ip
-      docker_bridge_cidr = var.net_profile_docker_bridge_cidr
-      outbound_type      = var.net_profile_outbound_type
-      pod_cidr           = var.net_profile_pod_cidr
-      service_cidr       = var.net_profile_service_cidr
-    }
-
-    tags = var.tags
-
-    timeouts {
-      create = "20m"
-    }
+  network_profile {
+    network_plugin     = var.network_plugin
+    network_policy     = var.network_policy
+    dns_service_ip     = var.net_profile_dns_service_ip
+    docker_bridge_cidr = var.net_profile_docker_bridge_cidr
+    outbound_type      = var.net_profile_outbound_type
+    pod_cidr           = var.net_profile_pod_cidr
+    service_cidr       = var.net_profile_service_cidr
   }
+
+  tags = var.tags
+
+  timeouts {
+    create = "20m"
+  }
+}

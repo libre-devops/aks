@@ -177,7 +177,7 @@ variable "enable_azure_policy" {
 
 variable "enable_rbac" {
   description = "Whether or not RBAC is enabled on the cluster"
-  type = bool
+  type        = bool
 }
 
 variable "network_plugin" {
@@ -212,8 +212,8 @@ variable "identity_ids" {
 
 variable "law_workspace_id" {
   description = "Specifics if a OMS agent should be enabled on the cluster"
-  type = bool
-  default = null
+  type        = bool
+  default     = null
 }
 
 variable "net_profile_outbound_type" {
