@@ -211,9 +211,9 @@ variable "identity_ids" {
 }
 
 variable "law_workspace_id" {
-  description = "Specifics if a OMS agent should be enabled on the cluster"
-  type        = bool
-  default     = null
+  description = "Specifics if a OMS agent should be enabled on the cluster, set as empty string to disable by default"
+  type        = string
+  default     = ""
 }
 
 variable "net_profile_outbound_type" {
