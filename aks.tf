@@ -84,7 +84,7 @@ resource "azurerm_kubernetes_cluster" "main_aks" {
   dynamic "oms_agent" {
     for_each = var.law_workspace_id != "" ? [var.law_workspace_id] : []
     content {
-      log_analytics_workspace_id = var.law_workspace_id
+      log_analytics_workspace_id = var.law_workspace_id #tfsec:ignore:azure-container-logging
     }
   }
 
