@@ -81,7 +81,7 @@ resource "azurerm_kubernetes_cluster" "main_aks" {
   role_based_access_control_enabled = var.enable_rbac
 
   dynamic "oms_agent" {
-    for_each = length(var.law_workspace_id) != "" ? [var.law_workspace_id] : []
+    for_each = var.law_workspace_id != "" ? [var.law_workspace_id] : []
     content {
       log_analytics_workspace_id = var.law_workspace_id
     }
