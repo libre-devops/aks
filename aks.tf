@@ -78,10 +78,14 @@ resource "azurerm_kubernetes_cluster" "main_aks" {
 
     http_application_routing_enabled = var.enable_http_application_routing
     azure_policy_enabled             = var.enable_azure_policy
+   role_based_access_control_enabled = var.enable_rbac
 
-    #  oms_agent {
-    #    log_analytics_workspace_id = var.law_workspace_id
-    #  }
+  dynamic "oms_agent" {
+    for_each = length(var.law_workspace_id) != ""  ? [var.law_workspace_id] : []
+    content {
+      log_analytics_workspace_id = var.law_workspace_id
+    }
+  }
 
     network_profile {
       network_plugin     = var.network_plugin

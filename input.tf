@@ -175,6 +175,11 @@ variable "enable_azure_policy" {
   default     = false
 }
 
+variable "enable_rbac" {
+  description = "Whether or not RBAC is enabled on the cluster"
+  type = bool
+}
+
 variable "network_plugin" {
   description = "Network plugin to use for networking."
   type        = string
@@ -203,6 +208,12 @@ variable "identity_ids" {
   description = "Specifies a list of user managed identity ids to be assigned to the VM."
   type        = list(string)
   default     = []
+}
+
+variable "law_workspace_id" {
+  description = "Specifics if a OMS agent should be enabled on the cluster"
+  type = bool
+  default = null
 }
 
 variable "net_profile_outbound_type" {
