@@ -80,6 +80,7 @@ resource "azurerm_kubernetes_cluster" "main_aks" {
   azure_policy_enabled              = var.enable_azure_policy
   role_based_access_control_enabled = var.enable_rbac
 
+  #tfsec:ignore:azure-container-logging
   dynamic "oms_agent" {
     for_each = var.law_workspace_id != "" ? [var.law_workspace_id] : []
     content {
