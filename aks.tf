@@ -1,3 +1,6 @@
+#checkov:skip=CKV_AZURE_4:Monitoring can be enabled but is disabled by default
+#checkov:skip=CKV_AZURE_7:This module does not consider network policy
+#checkov:skip=CKV_AZURE_117:This module does not consider for disk encryption sets
 #tfsec:ignore:azure-container-logging
 resource "azurerm_kubernetes_cluster" "main_aks" {
 
