@@ -29,7 +29,7 @@ resource "azurerm_kubernetes_cluster" "main_aks" {
       os_disk_size_gb       = var.default_node_os_disk_size_gb
       vnet_subnet_id        = var.default_node_subnet_id
       enable_node_public_ip = var.enable_node_public_ip
-      availability_zones    = var.default_node_availability_zones
+      zones                 = var.default_node_availability_zones
       node_count            = var.default_node_count
     }
   }
@@ -47,7 +47,7 @@ resource "azurerm_kubernetes_cluster" "main_aks" {
       os_disk_size_gb       = var.default_node_os_disk_size_gb
       vnet_subnet_id        = var.default_node_subnet_id
       enable_node_public_ip = var.enable_node_public_ip
-      availability_zones    = var.default_node_availability_zones
+      zones                 = var.default_node_availability_zones
       node_count            = var.default_node_count
     }
   }
@@ -61,12 +61,19 @@ resource "azurerm_kubernetes_cluster" "main_aks" {
   }
 
   dynamic "identity" {
-    for_each = var.client_id == "" || var.client_secret == "" ? ["identity"] : []
+    for_each = length(var.identity_ids) == 0 && var.identity_type == "SystemAssigned" ? [var.identity_type] : []
     content {
-      type                      = var.identity_type
-      user_assigned_identity_id = var.user_assigned_identity_id
+      type = var.identity_type
     }
   }
+
+  dynamic "identity" {
+    for_each = length(var.identity_ids) > 0 || var.identity_type == "UserAssigned" ? [var.identity_type] : []
+    content {
+      type         = var.identity_type
+      identity_ids = length(var.identity_ids) > 0 ? var.identity_ids : []
+    }
+
 
   http_application_routing_enabled = var.enable_http_application_routing
   azure_policy_enabled             = var.enable_azure_policy

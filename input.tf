@@ -204,6 +204,12 @@ variable "net_profile_docker_bridge_cidr" {
   default     = null
 }
 
+variable "identity_ids" {
+  description = "Specifies a list of user managed identity ids to be assigned to the VM."
+  type        = list(string)
+  default     = []
+}
+
 variable "net_profile_outbound_type" {
   description = "(Optional) The outbound (egress) routing method which should be used for this Kubernetes Cluster. Possible values are loadBalancer and userDefinedRouting. Defaults to loadBalancer."
   type        = string
