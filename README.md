@@ -6,7 +6,7 @@ module "aks" {
   location = module.rg.rg_location
   tags     = module.rg.rg_tags
 
-  aks_name           = "aks-${var.short}-${var.loc}-${terraform.workspace}-01"
+  aks_name                = "aks-${var.short}-${var.loc}-${terraform.workspace}-01"
   admin_username          = "LibreDevOpsAdmin"
   ssh_public_key          = data.azurerm_ssh_public_key.mgmt_ssh_key.public_key
   kubernetes_version      = "1.22"
