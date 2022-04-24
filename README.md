@@ -28,6 +28,9 @@ module "aks" {
   user_assigned_identity_id = data.azurerm_user_assigned_identity.mgmt_user_assigned_id.id
 }
 ```
+
+For a full example build, check out the [Libre DevOps Website](https://www.libredevops.org/quickstart/utils/terraform/using-lbdo-tf-modules-example.html)
+
 ## Requirements
 
 No requirements.
