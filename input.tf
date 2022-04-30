@@ -1,24 +1,7 @@
-variable "rg_name" {
-  description = "The name of the resource group, this module does not create a resource group, it is expecting the value of a resource group already exists"
+variable "admin_username" {
+  description = "The admin username of the cluster"
   type        = string
-  validation {
-    condition     = length(var.rg_name) > 1 && length(var.rg_name) <= 24
-    error_message = "Resource group name is not valid."
-  }
-}
-
-variable "location" {
-  description = "The location for this resource to be put in"
-  type        = string
-}
-
-variable "tags" {
-  description = "The tags assigned to the resource"
-  type        = map(string)
-  validation {
-    condition     = var.tags != null
-    error_message = "The tags field cannot be null."
-  }
+  sensitive   = true
 }
 
 variable "aks_name" {
@@ -30,68 +13,33 @@ variable "aks_name" {
   }
 }
 
-variable "kubernetes_version" {
-  description = "The kubernetes version in floating point"
+variable "client_id" {
+  description = "The ID of the service principle, if one is to be used, defaults to empty string as it is not used"
   type        = string
+  default     = ""
 }
 
-variable "dns_prefix" {
-  description = "The DNS prefix to be assigned to the kubernetes cluster"
+variable "client_secret" {
+  description = "The client secret of the service principle, if one is to used, defaults to empty string as it is not used"
   type        = string
+  default     = ""
 }
 
-variable "sku_tier" {
-  description = "The SKU tier of the kubernetes cluster, default is Free.  Difference only is if there is an SLA"
-  type        = string
-  default     = "Free"
+variable "default_node_agents_max_count" {
+  description = "The maximum count of agent that are deployed to the default node, defaults to 1"
+  type        = number
+  default     = "1"
 }
 
-variable "private_cluster_enabled" {
-  description = "If true cluster API server will be exposed only on internal IP address and available only in cluster vnet."
-  type        = bool
-  default     = true
-}
-
-variable "enable_node_public_ip" {
-  description = "(Optional) Should nodes in this Node Pool have a Public IP Address? Defaults to false."
-  type        = bool
-  default     = false
-}
-
-variable "admin_username" {
-  description = "The admin username of the cluster"
-  type        = string
-  sensitive   = true
-}
-
-variable "ssh_public_key" {
-  description = "The public key for the admin user"
-  type        = string
-}
-
-variable "default_node_orchestrator_version" {
-  description = "The orchestrator version of the default node"
-  type        = string
-}
-
-variable "default_node_pool_name" {
-  description = "The default pool name of the default node"
-  type        = string
-}
-
-variable "default_node_vm_size" {
-  description = "The VM size of the default node, e.g. Standard_B4ms"
-  type        = string
-}
-
-variable "default_node_os_disk_size_gb" {
-  description = "The size of the disk of the VM"
+variable "default_node_agents_min_count" {
+  description = "The minimum count of agents that are deployed to the default node, defaults to 1"
   type        = number
 }
 
-variable "default_node_subnet_id" {
-  description = "The subnet ID for the kubernetes cluster"
+variable "default_node_agents_type" {
+  description = "Sets the default agent type"
   type        = string
+  default     = "VirtualMachineScaleSets"
 }
 
 variable "default_node_availability_zones" {
@@ -117,54 +65,38 @@ variable "default_node_enable_manually_scaling" {
   default     = true
 }
 
-variable "default_node_agents_max_count" {
-  description = "The maximum count of agent that are deployed to the default node, defaults to 1"
+variable "default_node_orchestrator_version" {
+  description = "The orchestrator version of the default node"
+  type        = string
+}
+
+variable "default_node_os_disk_size_gb" {
+  description = "The size of the disk of the VM"
   type        = number
-  default     = "1"
 }
 
-variable "default_node_agents_min_count" {
-  description = "The minimum count of agents that are deployed to the default node, defaults to 1"
-  type        = number
-}
-
-variable "default_node_agents_type" {
-  description = "Sets the default agent type"
+variable "default_node_pool_name" {
+  description = "The default pool name of the default node"
   type        = string
-  default     = "VirtualMachineScaleSets"
 }
 
-variable "client_id" {
-  description = "The ID of the service principle, if one is to be used, defaults to empty string as it is not used"
+variable "default_node_subnet_id" {
+  description = "The subnet ID for the kubernetes cluster"
   type        = string
-  default     = ""
 }
 
-variable "client_secret" {
-  description = "The client secret of the service principle, if one is to used, defaults to empty string as it is not used"
+variable "default_node_vm_size" {
+  description = "The VM size of the default node, e.g. Standard_B4ms"
   type        = string
-  default     = ""
 }
 
-variable "identity_type" {
-  description = "The type of identity to be used, defaults to system-assigned"
+variable "dns_prefix" {
+  description = "The DNS prefix to be assigned to the kubernetes cluster"
   type        = string
-  default     = "SystemAssigned"
 }
 
 variable "enable_auto_scaling" {
   description = "Whether auto scaling should be enabled, defaults to false"
-  type        = bool
-  default     = false
-}
-
-variable "enable_ingress_application_gateway" {
-  description = "Whether or not a application gateway should be enabled for ingress controller, defaults to null"
-  default     = null
-}
-
-variable "enable_http_application_routing" {
-  description = "Whether or not http routing is allowed, defaults to false"
   type        = bool
   default     = false
 }
@@ -175,21 +107,54 @@ variable "enable_azure_policy" {
   default     = false
 }
 
+variable "enable_http_application_routing" {
+  description = "Whether or not http routing is allowed, defaults to false"
+  type        = bool
+  default     = false
+}
+
+variable "enable_ingress_application_gateway" {
+  description = "Whether or not a application gateway should be enabled for ingress controller, defaults to null"
+  default     = null
+}
+
+variable "enable_node_public_ip" {
+  description = "(Optional) Should nodes in this Node Pool have a Public IP Address? Defaults to false."
+  type        = bool
+  default     = false
+}
+
 variable "enable_rbac" {
   description = "Whether or not RBAC is enabled on the cluster"
   type        = bool
 }
 
-variable "network_plugin" {
-  description = "Network plugin to use for networking."
-  type        = string
-  default     = "kubenet"
+variable "identity_ids" {
+  description = "Specifies a list of user managed identity ids to be assigned to the VM."
+  type        = list(string)
+  default     = []
 }
 
-variable "network_policy" {
-  description = " (Optional) Sets up network policy to be used with Azure CNI. Network policy allows us to control the traffic flow between pods. Currently supported values are calico and azure. Changing this forces a new resource to be created."
+variable "identity_type" {
+  description = "The type of identity to be used, defaults to system-assigned"
   type        = string
-  default     = null
+  default     = "SystemAssigned"
+}
+
+variable "kubernetes_version" {
+  description = "The kubernetes version in floating point"
+  type        = string
+}
+
+variable "law_workspace_id" {
+  description = "Specifics if a OMS agent should be enabled on the cluster, set as empty string to disable by default"
+  type        = string
+  default     = ""
+}
+
+variable "location" {
+  description = "The location for this resource to be put in"
+  type        = string
 }
 
 variable "net_profile_dns_service_ip" {
@@ -202,18 +167,6 @@ variable "net_profile_docker_bridge_cidr" {
   description = "(Optional) IP address (in CIDR notation) used as the Docker bridge IP address on nodes. Changing this forces a new resource to be created."
   type        = string
   default     = null
-}
-
-variable "identity_ids" {
-  description = "Specifies a list of user managed identity ids to be assigned to the VM."
-  type        = list(string)
-  default     = []
-}
-
-variable "law_workspace_id" {
-  description = "Specifics if a OMS agent should be enabled on the cluster, set as empty string to disable by default"
-  type        = string
-  default     = ""
 }
 
 variable "net_profile_outbound_type" {
@@ -232,4 +185,51 @@ variable "net_profile_service_cidr" {
   description = "(Optional) The Network Range used by the Kubernetes service. Changing this forces a new resource to be created."
   type        = string
   default     = null
+}
+
+variable "network_plugin" {
+  description = "Network plugin to use for networking."
+  type        = string
+  default     = "kubenet"
+}
+
+variable "network_policy" {
+  description = " (Optional) Sets up network policy to be used with Azure CNI. Network policy allows us to control the traffic flow between pods. Currently supported values are calico and azure. Changing this forces a new resource to be created."
+  type        = string
+  default     = null
+}
+
+variable "private_cluster_enabled" {
+  description = "If true cluster API server will be exposed only on internal IP address and available only in cluster vnet."
+  type        = bool
+  default     = true
+}
+
+variable "rg_name" {
+  description = "The name of the resource group, this module does not create a resource group, it is expecting the value of a resource group already exists"
+  type        = string
+  validation {
+    condition     = length(var.rg_name) > 1 && length(var.rg_name) <= 24
+    error_message = "Resource group name is not valid."
+  }
+}
+
+variable "sku_tier" {
+  description = "The SKU tier of the kubernetes cluster, default is Free.  Difference only is if there is an SLA"
+  type        = string
+  default     = "Free"
+}
+
+variable "ssh_public_key" {
+  description = "The public key for the admin user"
+  type        = string
+}
+
+variable "tags" {
+  description = "The tags assigned to the resource"
+  type        = map(string)
+  validation {
+    condition     = var.tags != null
+    error_message = "The tags field cannot be null."
+  }
 }
