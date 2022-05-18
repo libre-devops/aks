@@ -53,6 +53,6 @@ module "aks" {
   default_node_count                = "1"
   default_node_agents_min_count     = null
   default_node_agents_max_count     = null
-
-  user_assigned_identity_id = data.azurerm_user_assigned_identity.mgmt_user_assigned_id.id
+  enable_rbac                       = true
+  identity_type                     = "SystemAssigned"
 }
