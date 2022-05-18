@@ -49,7 +49,7 @@ module "aks" {
   default_node_pool_name            = "lbdo-pool"
   default_node_vm_size              = "Standard_B2ms"
   default_node_os_disk_size_gb      = "127"
-  default_node_subnet_id            = element(module.network.subnets_ids, 2)
+  default_node_subnet_id            = element(values(module.network.subnets_ids), 2)
   default_node_availability_zones   = ["1"]
   default_node_count                = "1"
   default_node_agents_min_count     = null
@@ -57,8 +57,8 @@ module "aks" {
   enable_rbac                       = true
   identity_type                     = "SystemAssigned"
 }
-```
 
+```
 
 For a full example build, check out the [Libre DevOps Website](https://www.libredevops.org/quickstart/utils/terraform/using-lbdo-tf-modules-example.html)
 
